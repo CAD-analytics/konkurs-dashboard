@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Число заявлений на одного принятого: ВО и СПО, Санкт-Петербург и Россия, 2023–2025</title>
+<style>
+/* ===== Базовые токены: цвета, шрифт, отступы; светлая и темная тема ===== */
+/* Дизайн-токены, которые использует страница дашборда (замена токенов среды Claude) */
+:root {
+  color-scheme: light;
+  --font-anthropic-sans: "Times New Roman", Times, serif;
+  --font-anthropic-serif: "Times New Roman", Times, serif;
+  --color-fg: #1f1e1c; --color-fg-muted: #6b6a66; --color-bg: #ffffff; --color-panel: #fbfaf7;
+  --color-border-line: #e6e3dc; --color-ok: #2e7d4f; --color-warn: #a8681c; --color-bad: #c23b2b;
+  --cds-font-size-caption: 13px; --cds-font-size-body: 15px; --cds-font-size-heading: 18px; --cds-font-size-title: 30px;
+  --cds-font-weight-medium: 500;
+  --cds-gap-xs: 4px; --cds-gap-sm: 8px; --cds-gap-md: 12px; --cds-gap-lg: 20px; --cds-gap-xl: 32px;
+  --cds-pad-xs: 4px; --cds-pad-sm: 8px; --cds-pad-md: 12px; --cds-pad-lg: 16px; --cds-pad-xl: 24px;
+  --cds-radius: 8px;
+  --cds-chart-muted: #b9b5ab; --cds-chart-grid: #ece9e2; --cds-chart-axis: #cfcbc2; --cds-chart-reference: #9a968c;
+  --cds-surface-popover: #ffffff; --cds-border: #e0ddd6; --cds-shadow-popover: 0 4px 16px rgba(0,0,0,.12);
+  --cds-text-secondary: #6b6a66; --cds-dur-slow: 300ms; --cds-ease-out: cubic-bezier(.2,.8,.2,1);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --color-fg: #ecebe7; --color-fg-muted: #a3a19b; --color-bg: #1c1b19; --color-panel: #252421;
+    --color-border-line: #3a3834; --color-ok: #6cc08f; --color-warn: #e0a85a; --color-bad: #ee7a6a;
+    --cds-chart-muted: #6e6b64; --cds-chart-grid: #33312d; --cds-chart-axis: #4a4843; --cds-chart-reference: #8a877f;
+    --cds-surface-popover: #2c2b28; --cds-border: #45433e; --cds-shadow-popover: 0 4px 16px rgba(0,0,0,.5);
+    --cds-text-secondary: #a3a19b;
+  }
+}
+html, body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-family: var(--font-anthropic-sans); }
+#dash-root { max-width: 1400px; margin: 0 auto; padding: 24px clamp(12px, 3vw, 40px) 48px; }
+.dash-skeleton { color: transparent !important; background: var(--color-border-line); border-radius: 4px; }
+
+/* ===== Стили дашборда ===== */
+.kx { --kx-font: "Times New Roman", Times, serif; --kx-rf: #2e9e5b; --kx-fs-chart: calc(var(--cds-font-size-caption) + 2px); --kx-fs-label: calc(var(--cds-font-size-body) + 1px);
+  font-family: var(--kx-font); color: var(--color-fg); display: flex; flex-direction: column; gap: var(--cds-gap-lg); }
+@media (prefers-color-scheme: dark) { .kx { --kx-rf: #4fc07f; } }
+.kx button, .kx select, .kx input, .kx svg text { font-family: var(--kx-font); }
+
+/* ---------- шапка */
+.kx-pill { align-self: flex-start; display: inline-block; padding: 5px 16px; border-radius: 999px; border: 1.5px solid #a9c2f2;
+  background: linear-gradient(90deg, #f1f5ff, #e8f6fb); color: #16234a; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  font-size: var(--cds-font-size-caption); line-height: 1.3; }
+@media (prefers-color-scheme: dark) { .kx-pill { border-color: #4a6db0; background: linear-gradient(90deg, rgba(80,120,220,.18), rgba(60,170,200,.14)); color: #dfe8ff; } }
+.kx h1 { font-family: var(--kx-font); font-weight: 700; font-size: var(--cds-font-size-title); margin: var(--cds-gap-sm) 0 0; line-height: 1.2; max-width: 70rem; }
+.kx .kx-lead { margin: var(--cds-gap-sm) 0 0; font-size: var(--cds-font-size-body); color: var(--color-fg-muted); max-width: 70rem; line-height: 1.45; }
+.kx h2 { font-family: var(--kx-font); font-size: var(--cds-font-size-heading); font-weight: 700; margin: 0; }
+.kx h3 { font-family: var(--kx-font); font-size: var(--kx-fs-label); font-weight: 700; margin: 0 0 var(--cds-gap-xs); }
+
+/* ---------- фильтры */
+.kx-filters { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm) var(--cds-gap-md); align-items: flex-end; }
+.kx-fg { display: flex; flex-direction: column; gap: 4px; }
+.kx-fg > span { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.kx-seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); }
+.kx-seg button { font-size: var(--cds-font-size-body); padding: 4px 10px; border: 0; background: transparent; color: var(--color-fg); cursor: pointer; position: relative; }
+.kx-seg button:first-child { border-radius: calc(var(--cds-radius) - 1px) 0 0 calc(var(--cds-radius) - 1px); }
+.kx-seg button:last-child { border-radius: 0 calc(var(--cds-radius) - 1px) calc(var(--cds-radius) - 1px) 0; }
+.kx-seg button + button { border-left: 1px solid var(--color-border-line); }
+.kx-seg button[aria-pressed="true"] { background: var(--color-fg); color: var(--color-bg); }
+.kx [data-tip]:hover::after, .kx [data-tip]:focus-visible::after { content: attr(data-tip); position: absolute; left: 50%; top: calc(100% + 6px); transform: translateX(-50%);
+  white-space: nowrap; background: var(--cds-surface-popover); color: var(--color-fg); border: 1px solid var(--cds-border); box-shadow: var(--cds-shadow-popover);
+  padding: 4px 8px; border-radius: 6px; font-size: var(--cds-font-size-caption); font-weight: 400; z-index: 30; pointer-events: none; }
+.kx select, .kx input[type="search"] { font-size: var(--cds-font-size-body); padding: 4px 8px; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: var(--color-bg); color: var(--color-fg); max-width: 100%; }
+.kx .kx-reset { font-size: var(--cds-font-size-body); padding: 4px 10px; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: transparent; color: var(--color-fg-muted); cursor: pointer; }
+
+/* ---------- карточки */
+.kx-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: var(--cds-gap-md); }
+.kx-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); position: relative; min-width: 0; }
+.kx-kpi { display: flex; flex-direction: column; }
+.kx-kpi .kx-lab { font-size: var(--cds-font-size-body); color: var(--color-fg-muted); flex: 1 0 auto; }
+.kx-kpi .kx-big { font-family: var(--kx-font); font-weight: 400; font-size: var(--cds-font-size-title); line-height: 1.15; margin-top: var(--cds-gap-xs); font-variant-numeric: tabular-nums; min-height: 1.15em; }
+.kx-kpi .kx-sub { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-top: var(--cds-gap-xs); font-variant-numeric: tabular-nums; }
+.kx-kpi .kx-sub b { color: var(--color-fg); font-weight: 700; }
+
+/* ---------- графики */
+.kx-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: var(--cds-gap-md); }
+.kx-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--cds-gap-sm); align-items: flex-start; }
+.kx-note { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 4px 0 var(--cds-gap-sm); }
+.kx-chart { min-height: 260px; }
+.kx-chart svg { display: block; overflow: visible; }
+.kx-chart text { font-size: var(--kx-fs-chart); fill: var(--color-fg-muted); }
+.kx-chart .kx-strong { fill: var(--color-fg); }
+.kx-chart .kx-lbl { fill: var(--color-fg); font-size: var(--kx-fs-label); }
+.kx-chart .kx-axis { fill: var(--color-fg); font-size: var(--kx-fs-chart); }
+.kx-empty { display: flex; align-items: center; justify-content: center; min-height: 200px; font-size: var(--cds-font-size-body); color: var(--color-fg-muted); text-align: center; padding: 0 var(--cds-pad-lg); }
+.kx-fail { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 200px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.kx-fail::before { content: ""; width: .375rem; height: .375rem; border-radius: 50%; background: var(--color-bad); }
+.kx-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-body); z-index: 5; max-width: 20rem; display: none; }
+.kx-tip .kx-th { color: var(--cds-text-secondary); margin-bottom: 2px; }
+.kx-tip .kx-tl { display: flex; gap: 6px; align-items: center; font-variant-numeric: tabular-nums; }
+.kx-tip .kx-sw { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+.kx-legend { display: flex; gap: var(--cds-gap-md); font-size: var(--kx-fs-chart); color: var(--color-fg-muted); margin: var(--cds-gap-xs) 0; }
+.kx-legend i { display: inline-block; width: 11px; height: 11px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+.kx-tools { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm); align-items: center; }
+.kx-spec { width: 100%; margin-bottom: var(--cds-gap-sm); }
+.kx-spec input { width: 100%; box-sizing: border-box; }
+
+/* ---------- рейтинги */
+.kx-rank { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: var(--cds-gap-lg); margin-top: var(--cds-gap-sm); }
+.kx-rank ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+.kx-rank li { display: grid; grid-template-columns: 1.5rem minmax(0, 1fr) auto; gap: 2px 10px; align-items: baseline; font-size: var(--kx-fs-label); }
+.kx-rank .kx-n { color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+.kx-rank .kx-nm { min-width: 0; overflow-wrap: anywhere; hyphens: auto; }
+.kx-rank .kx-cd { color: var(--color-fg-muted); font-size: var(--kx-fs-chart); margin-right: 4px; }
+.kx-rank .kx-v { font-variant-numeric: tabular-nums; font-weight: 700; text-align: right; }
+.kx-rank .kx-bar { grid-column: 2 / 4; height: 5px; border-radius: 2px; }
+.kx-rank .kx-none { font-size: var(--kx-fs-chart); color: var(--color-fg-muted); }
+.kx [data-dash-source-state=empty] { color: transparent; }
+.kx [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+</style>
+</head>
+<body>
+<div id="dash-root">
+<div class="kx" id="kx-root">
+  <header id="head">
+    <div class="kx-pill">Россия · Санкт-Петербург · 2023–2025</div>
+    <h1>Число поданных заявлений на обучение на одного принятого студента в организациях высшего образования (ВО) и среднего профессионального образования (СПО) г. Санкт-Петербург и России</h1>
+    <p class="kx-lead">Для анализа использовались данные из отчетов по форме № СПО-1 и № ВПО-1. Отчеты охватывают период с 2023 по 2025 годы и доступны на сайте министерства просвещения.</p>
+  </header>
+
+  <div class="kx-filters" id="filters">
+    <div class="kx-fg"><span>Учреждение</span><div class="kx-seg" data-param="level"><button data-v="ВО" data-tip="Высшее образование">ВО</button><button data-v="СПО" data-tip="Среднее профессиональное образование">СПО</button></div></div>
+    <div class="kx-fg"><span>Год приема</span><div class="kx-seg" data-param="year"><button data-v="2023">2023</button><button data-v="2024">2024</button><button data-v="2025">2025</button></div></div>
+    <div class="kx-fg"><span>Финансирование</span><div class="kx-seg" data-param="fin"><button data-v="Бюджет">Бюджет</button><button data-v="Контракт">Договор</button><button data-v="Все">Все</button></div></div>
+    <div class="kx-fg"><span>Тип учреждения</span><div class="kx-seg" data-param="own"><button data-v="Все">Все</button><button data-v="Гос" data-tip="Государственные и муниципальные организации">Гос.</button><button data-v="Негос" data-tip="Негосударственные (частные) организации">Негос.</button></div></div>
+    <div class="kx-fg"><span>Форма обучения</span><select id="f-form" aria-label="Форма обучения"><option>Все</option><option>Очная</option><option>Очно-заочная</option><option>Заочная</option></select></div>
+    <div class="kx-fg"><span id="f-sub-lab">Уровень образования</span><select id="f-sub" aria-label="Программа"></select></div>
+    <div class="kx-fg"><span id="f-base-lab">Тип конкурса</span><div class="kx-seg" data-param="base" id="f-base"></div></div>
+    <button class="kx-reset" id="f-reset">Сбросить</button>
+  </div>
+
+  <section class="kx-kpis" id="kpis">
+    <div class="kx-card kx-kpi" id="kpi-apps-spb">
+      <div class="kx-lab">Подано заявлений на обучение, СПб</div>
+      <div class="kx-big dash-skeleton" data-source="totals" data-field="spb_apps">—</div>
+      <div class="kx-sub"><b data-source="totals" data-field="spb_apps_d23"></b> <span class="kx-pp">(<span data-source="totals" data-field="spb_apps_p23"></span>)</span> <span class="kx-vs"></span></div>
+    </div>
+    <div class="kx-card kx-kpi" id="kpi-apps-rf">
+      <div class="kx-lab">Подано заявлений на обучение, РФ</div>
+      <div class="kx-big dash-skeleton" data-source="totals" data-field="rf_apps">—</div>
+      <div class="kx-sub"><b data-source="totals" data-field="rf_apps_d23"></b> <span class="kx-pp">(<span data-source="totals" data-field="rf_apps_p23"></span>)</span> <span class="kx-vs"></span></div>
+    </div>
+    <div class="kx-card kx-kpi" id="kpi-adm-spb">
+      <div class="kx-lab">Принято студентов, СПб</div>
+      <div class="kx-big dash-skeleton" data-source="totals" data-field="spb_adm">—</div>
+      <div class="kx-sub"><b data-source="totals" data-field="spb_adm_d23"></b> <span class="kx-pp">(<span data-source="totals" data-field="spb_adm_p23"></span>)</span> <span class="kx-vs"></span></div>
+    </div>
+    <div class="kx-card kx-kpi" id="kpi-adm-rf">
+      <div class="kx-lab">Принято студентов, РФ</div>
+      <div class="kx-big dash-skeleton" data-source="totals" data-field="rf_adm">—</div>
+      <div class="kx-sub"><b data-source="totals" data-field="rf_adm_d23"></b> <span class="kx-pp">(<span data-source="totals" data-field="rf_adm_p23"></span>)</span> <span class="kx-vs"></span></div>
+    </div>
+    <div class="kx-card kx-kpi" id="kpi-k-spb">
+      <div class="kx-lab">Заявления на одного принятого человека, СПб</div>
+      <div class="kx-big dash-skeleton" data-source="totals" data-field="spb_k">—</div>
+      <div class="kx-sub"><b data-source="totals" data-field="spb_k_d23"></b> <span class="kx-pp">(<span data-source="totals" data-field="spb_k_p23"></span>)</span> <span class="kx-vs"></span></div>
+    </div>
+    <div class="kx-card kx-kpi" id="kpi-k-rf">
+      <div class="kx-lab">Заявления на одного принятого человека, РФ</div>
+      <div class="kx-big dash-skeleton" data-source="totals" data-field="rf_k">—</div>
+      <div class="kx-sub"><b data-source="totals" data-field="rf_k_d23"></b> <span class="kx-pp">(<span data-source="totals" data-field="rf_k_p23"></span>)</span> <span class="kx-vs"></span></div>
+    </div>
+  </section>
+
+  <div class="kx-grid">
+    <section class="kx-card" id="trend-card">
+      <div class="kx-head">
+        <h2 id="trend-h">Динамика по всем направлениям</h2>
+        <select id="m1" aria-label="Показатель"><option value="k">Заявления на одного принятого человека</option><option value="apps">Подано заявлений на обучение</option><option value="adm">Принято на обучение</option></select>
+      </div>
+      <p class="kx-note" id="trend-note"></p>
+      <div class="kx-chart dash-skeleton" id="trend" data-source="totals"></div>
+      <div class="kx-tip"></div>
+    </section>
+    <section class="kx-card" id="spec-card">
+      <div class="kx-head">
+        <h2 id="spec-h">Динамика по отдельному направлению</h2>
+        <select id="m2" aria-label="Показатель"><option value="k">Заявления на одного принятого человека</option><option value="apps">Подано заявлений на обучение</option><option value="adm">Принято на обучение</option></select>
+      </div>
+      <p class="kx-note" id="spec-note"></p>
+      <div class="kx-tools kx-spec">
+        <input type="search" id="spec-q" list="kx-spec-list" aria-label="Специальность или направление">
+        <datalist id="kx-spec-list"></datalist>
+      </div>
+      <div class="kx-chart dash-skeleton" id="spec" data-source="prog catalog"></div>
+      <div class="kx-tip"></div>
+    </section>
+  </div>
+
+  <div class="kx-grid">
+    <section class="kx-card" id="areas-card">
+      <h2 id="areas-h">Заявления на одного принятого человека по областям образования</h2>
+      <div class="kx-legend"><span><i class="kx-c0"></i>Санкт-Петербург</span><span><i class="kx-c1"></i>Россия</span></div>
+      <div class="kx-chart dash-skeleton" id="areas" data-source="areas"></div>
+    </section>
+    <section class="kx-card" id="vs-card">
+      <h2 id="vs-h">Заявления на одного принятого человека по укрупненным группам</h2>
+      <p class="kx-note">Каждая точка — укрупненная группа. Если точка выше пунктирной линии, то число заявлений на одного принятого человека в СПб выше, чем по РФ. Размер точки — это число принятых студентов в СПб.</p>
+      <div class="kx-chart dash-skeleton" id="vs" data-source="ugs ugs_dict"></div>
+      <div class="kx-tip"></div>
+    </section>
+  </div>
+
+  <section id="rank-sec">
+    <div class="kx-head">
+      <h2 id="rank-h">Топ специальностей и направлений по областям образования</h2>
+      <div class="kx-tools">
+        <select id="r-area" aria-label="Область образования"></select>
+        <select id="r-metric" aria-label="Показатель"><option value="k">по числу заявлений на одного принятого человека</option><option value="apps">по числу поданных заявлений на обучение</option><option value="adm">по числу принятых на обучение</option></select>
+      </div>
+    </div>
+    <div class="kx-grid" style="margin-top: var(--cds-gap-sm)">
+      <section class="kx-card" id="top-card">
+        <h2 id="top-h">Высокие показатели</h2>
+        <div class="kx-rank" id="rank-top" data-source="prog catalog"></div>
+      </section>
+      <section class="kx-card" id="bottom-card">
+        <h2 id="bottom-h">Базовые показатели</h2>
+        <div class="kx-rank" id="rank-bottom" data-source="prog catalog"></div>
+      </section>
+    </div>
+  </section>
+</div>
+
+</div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
